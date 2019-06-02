@@ -1,0 +1,27 @@
+{
+  "name": "farm_server",
+  "version": "0.1.0",
+  "description": "A server Side for A farm Game",
+  "main": "index.js",
+  "author": "Mohammad Javad GHasemy",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@colyseus/loadtest": "^0.10.1"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "DEBUG=colyseus:* node src/index.js",
+    "loadtest": "colyseus-loadtest loadtest/example.js --room farm --numClients 1"
+  },
+  "dependencies": {
+    "@colyseus/monitor": "^0.10.0",
+    "@colyseus/social": "^0.10.2",
+    "colyseus": "^0.10.7",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "matter-js": "^0.14.2",
+    "mongoose": "^5.5.11",
+    "mongoose-unique-validator": "^2.0.3",
+    "password-hash": "^1.2.2"
+  }
+}
