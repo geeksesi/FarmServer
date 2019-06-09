@@ -36,7 +36,7 @@ module.exports = class extends colyseus.Room {
                 message_type: "init",
                 data: build
             });
-
+            // console.log(build);
         })
         console.log("someon is here");
     }
@@ -61,6 +61,7 @@ module.exports = class extends colyseus.Room {
                 } else {
                     this.send(client, {
                         ok: true,
+                        message_type: "on_add",
                         message: `build maded by id : ${res.body._id}`,
                         data: {
                             id: res.body._id,
