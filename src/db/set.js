@@ -21,10 +21,9 @@ function add_build(type, location, cb) {
 
 }
 
-function update_build(id, new_type, new_location, cb) {
+function update_build(id, new_location, cb) {
     resault = {};
     db_module.Build.findOneAndUpdate({ _id: id }, {
-            type: new_type,
             location: new_location
         }, { runValidators: true, context: 'query' },
         (err, build) => {

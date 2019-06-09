@@ -10,8 +10,9 @@ module.exports = class extends colyseus.Room {
         this.authed_client = {};
         console.log("init");
     }
-
+    
     onAuth(options) {
+        console.log("auth");
         return true;
     }
 
@@ -79,7 +80,7 @@ module.exports = class extends colyseus.Room {
                 });
                 return false;
             }
-            update_build(message.id, message.new_type, message.new_location, res => {
+            update_build(message.id, message.new_location, res => {
                 if (!res.ok) {
                     console.log(res);
                     this.send(client, {
