@@ -3,7 +3,7 @@ exports.requestJoinOptions = function(i) {
 }
 
 exports.requestJoinOptions = function() {
-
+    return {id: "12"};
 }
 
 exports.onJoin = function() {
@@ -20,10 +20,10 @@ exports.onJoin = function() {
     //     new_type : 'town_hall',
     //     new_location : "5-5"
     // });
-    this.send({
-        message_type: 'delete_build',
-        id : "5cf323cc6525ad6d88dcc8fe",
-    });
+    // this.send({
+    //     message_type: 'delete_build',
+    //     id : "5cf323cc6525ad6d88dcc8fe",
+    // });
 }
 
 exports.onMessage = function(message) {
