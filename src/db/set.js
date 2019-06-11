@@ -51,8 +51,29 @@ function delete_build(id, cb) {
     });
 }
 
+
+function add_user(cb) {
+    const add_user = new db_module.User({
+        xp: 0,
+        soft_currency: 100,
+        hard_currency: 0
+    });
+    let resault = {};
+    add_user.save((err, res) => {
+        if (err) {
+            resault.ok = false;
+            resault.body = err;
+        } else {
+            resault.ok = true;
+            resault.body = res;
+        }
+        cb(resault);
+    })
+}
+
 module.exports = {
     add_build: add_build,
     update_build: update_build,
     delete_build: delete_build,
+    add_user : add_user,
 };
