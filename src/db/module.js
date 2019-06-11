@@ -37,8 +37,8 @@ const userSchema = mongoos.Schema({
 buildSchema.plugin(uniqueValidator);
 userSchema.plugin(uniqueValidator);
 
-const Build = mongoos.model("Build", buildSchema);
-const User = mongoos.model("User", userSchema);
+const Build = mongoos.model("build", buildSchema);
+const User = mongoos.model("user", userSchema);
 
 module.exports = {
     Build: Build,
