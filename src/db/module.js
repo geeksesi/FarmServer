@@ -2,15 +2,35 @@ const mongoos = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 const buildSchema = mongoos.Schema({
+    user_id: {
+        type: String,
+        require: true
+    },
     type: {
         type: String,
         require: true,
     },
-    location: {
-        type: String,
+    x0: {
+        type: int,
         require: true,
-        unique: true,
-    }
+    },
+    y0: {
+        type: int,
+        require: true,
+    },
+    x1: {
+        type: int,
+        require: true,
+        validate: function(v) {
+            return new Promise(function(resolve, reject) {
+                Build.find({ x: { $gt: this.x, $lt: (this.x + space) } });
+            });
+        }
+    },
+    y1: {
+        type: int,
+        require: true,
+    },
 
 });
 

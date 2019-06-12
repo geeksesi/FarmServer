@@ -1,10 +1,12 @@
 const db_module = require('./module');
 const password_hash = require('password-hash');
 
-function add_build(type, location, cb) {
+function add_build(type, x, y, space, cb) {
     const add_build = new db_module.Build({
         type: type,
-        location: location
+        x: x,
+        y: y,
+        space: space
 
     });
     let resault = {};
@@ -21,10 +23,11 @@ function add_build(type, location, cb) {
 
 }
 
-function update_build(id, new_location, cb) {
+function update_build(id, new_x, new_y, cb) {
     resault = {};
     db_module.Build.findOneAndUpdate({ _id: id }, {
-            location: new_location
+            x: new_x,
+            y: new_y,
         }, { runValidators: true, context: 'query' },
         (err, build) => {
             if (err) {
@@ -75,5 +78,5 @@ module.exports = {
     add_build: add_build,
     update_build: update_build,
     delete_build: delete_build,
-    add_user : add_user,
+    add_user: add_user,
 };
