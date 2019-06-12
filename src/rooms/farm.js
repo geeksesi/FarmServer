@@ -53,7 +53,7 @@ module.exports = class extends colyseus.Room {
                     ok: false,
                     message_type: "init",
                     message: "can't access to database",
-                    data: err,
+                    data: null,
                     user:auth
                 });
 
