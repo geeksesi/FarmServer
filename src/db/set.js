@@ -12,7 +12,6 @@ async function add_build(type, user_id, location, cb) {
         resault.ok = false;
         resault.body = {};
         resault.body.message = "can't do build here.";
-        console.log("it's very hell")
         cb(resault);
         return false;
     }
@@ -27,7 +26,6 @@ async function add_build(type, user_id, location, cb) {
     });
     add_build.save((err, res) => {
         if (err) {
-            console.log(err);
             resault.ok = false;
             resault.body = err;
         } else {

@@ -77,7 +77,6 @@ module.exports = class extends colyseus.Room {
         // console.log(message);
         if (message.message_type === 'add_build') {
             if (typeof message.type === 'undefined' && typeof message.location === 'undefined') {
-                console.log("it's ok")
                 this.send(client, {
                     ok: false,
                     message_type: "on_add",
@@ -87,7 +86,6 @@ module.exports = class extends colyseus.Room {
             }
             add_build(message.type, this.authed_client[client.id].id, message.location, res => {
                 if (!res.ok) {
-                    console.log("jj");
                     this.send(client, {
                         ok: false,
                         message_type: "on_add",
@@ -120,7 +118,6 @@ module.exports = class extends colyseus.Room {
             }
             update_build(message.id, message.new_location, res => {
                 if (!res.ok) {
-                    console.log(res);
                     this.send(client, {
                         ok: false,
                         message_type: "on_change",

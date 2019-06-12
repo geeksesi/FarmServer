@@ -11,10 +11,8 @@ function build_location(x0, x1, y0, y1, user_id) {
         }, (err, builds) => {
             if (err !== null || builds === null || builds.length < 1) {
                 resolve(true);
-                console.log("not_hell")
             } else {
                 resolve(false);
-                console.log("hell")
             }
         });
     })
