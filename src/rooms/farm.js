@@ -7,22 +7,23 @@ const { add_build, update_build, delete_build, add_user } = require('./../db/set
 module.exports = class extends colyseus.Room {
 
     onInit(options) {
-        this.autoDispose = false;
+        // this.autoDispose = false;
         this.authed_client = {};
         console.log("init");
     }
 
     onAuth(options) {
-        console.log("auth");
-        let user_id = options.user_id;
+        // console.log(options.id);
+        let user_id = options.id;
         let promise = new Promise((resolve, reject) => {
-            User.find({ _id: user_id }, (err, user) => {
+            User.findOne({ _id: user_id }, (err, user) => {
                 if (err !== null || user == null || user.length === 0) {
-                    add_user((err, user) => {
-                        if (err) {
+                    add_user(res => {
+                        if (!res.ok) {
+                            // console.log("err "+err);
                             reject(false);
                         } else {
-                            resolve(user);
+                            resolve(res.body);
                         }
                     });
 
@@ -40,6 +41,7 @@ module.exports = class extends colyseus.Room {
         if (auth === false) {
             return false;
         }
+        // console.log(auth);
         this.authed_client[client.id] = {
             user_id: auth._id,
             xp: auth.xp,
@@ -47,33 +49,35 @@ module.exports = class extends colyseus.Room {
             hard_currency: auth.hard_currency,
             ws: client
         }
-        Build.find({}, (err, build) => {
+        Build.find({ user_id: this.authed_client[client.id].id }, (err, build) => {
             if (err) {
                 this.send(client, {
                     ok: false,
                     message_type: "init",
                     message: "can't access to database",
                     data: null,
-                    user:auth
+                    user: auth
                 });
 
                 return false;
             }
+            console.log(build);
             this.send(client, {
                 ok: true,
                 message: "here your init data",
                 message_type: "init",
                 data: build,
-                user : auth
+                user: auth
             });
             // console.log(build);
         })
         console.log("someon is here");
     }
     onMessage(client, message) {
-        console.log(message);
+        // console.log(message);
         if (message.message_type === 'add_build') {
             if (typeof message.type === 'undefined' && typeof message.location === 'undefined') {
+                console.log("it's ok")
                 this.send(client, {
                     ok: false,
                     message_type: "on_add",
@@ -81,8 +85,9 @@ module.exports = class extends colyseus.Room {
                 });
                 return false;
             }
-            add_build(message.type, message.location, res => {
+            add_build(message.type, this.authed_client[client.id].id, message.location, res => {
                 if (!res.ok) {
+                    console.log("jj");
                     this.send(client, {
                         ok: false,
                         message_type: "on_add",
@@ -96,7 +101,10 @@ module.exports = class extends colyseus.Room {
                         data: {
                             id: res.body._id,
                             type: res.body.type,
-                            location: res.body.location
+                            x0: res.body.x0,
+                            x1: res.body.x1,
+                            y0: res.body.y0,
+                            y1: res.body.y1,
                         }
                     });
                 }
