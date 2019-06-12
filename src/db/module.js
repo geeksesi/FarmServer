@@ -11,24 +11,19 @@ const buildSchema = mongoos.Schema({
         require: true,
     },
     x0: {
-        type: int,
+        type: Number,
         require: true,
     },
     y0: {
-        type: int,
+        type: Number,
         require: true,
     },
     x1: {
-        type: int,
+        type: Number,
         require: true,
-        validate: function(v) {
-            return new Promise(function(resolve, reject) {
-                Build.find({ x: { $gt: this.x, $lt: (this.x + space) } });
-            });
-        }
     },
     y1: {
-        type: int,
+        type: Number,
         require: true,
     },
 
