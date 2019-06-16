@@ -1,6 +1,33 @@
 const mongoos = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
+const cronSchema = mongoos.Schema({
+    build_id: {
+        type: mongoos.Schema.Types.ObjectId,
+        require: true,
+    },
+    timestamp: {
+        type: Number,
+        require: false
+    },
+    cron_time: {
+        type: Number,
+        require: false
+    },
+    finish_time: {
+        type: Number,
+        require: false
+    },
+    cron_type: {
+        type: String,
+        require: false
+    },
+    status: {
+        type: Boolean,
+        require: false
+    },
+});
+
 const buildSchema = mongoos.Schema({
     user_id: {
         type: String,
@@ -26,7 +53,10 @@ const buildSchema = mongoos.Schema({
         type: Number,
         require: true,
     },
-
+    timestamp: {
+        type: Number,
+        require: true,
+    },
 });
 
 const userSchema = mongoos.Schema({
@@ -54,8 +84,10 @@ userSchema.plugin(uniqueValidator);
 
 const Build = mongoos.model("build", buildSchema);
 const User = mongoos.model("user", userSchema);
+const Cron = mongoos.model("cron", cronSchema);
 
 module.exports = {
     Build: Build,
-    User: User
+    User: User,
+    Cron: Cron,
 };
