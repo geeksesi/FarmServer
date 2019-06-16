@@ -98,14 +98,14 @@ function add_user(cb) {
     })
 }
 
-function add_cron(build_id, timestamp, cron_time, finish_time, cron_type, status) {
+function add_cron(build_id, cron_time, finish_time, cron_type) {
     const add_cron = new db_module.Cron({
         build_id: build_id,
-        timestamp: timestamp,
+        timestamp: Math.round((new Date()).getTime() / 1000),
         cron_time: cron_time,
         finish_time: finish_time,
         cron_type: cron_type,
-        status: status,
+        status: "open",
     });
     let resault = {};
     add_cron.save((err, res) => {
