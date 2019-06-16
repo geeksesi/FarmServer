@@ -82,10 +82,33 @@ function add_user(cb) {
     const add_user = new db_module.User({
         xp: 0,
         soft_currency: 100,
-        hard_currency: 0
+        hard_currency: 0,
+        timestamp: Math.round((new Date()).getTime() / 1000)
     });
     let resault = {};
     add_user.save((err, res) => {
+        if (err) {
+            resault.ok = false;
+            resault.body = err;
+        } else {
+            resault.ok = true;
+            resault.body = res;
+        }
+        cb(resault);
+    })
+}
+
+function add_cron(build_id, timestamp, cron_time, finish_time, cron_type, status) {
+    const add_cron = new db_module.Cron({
+        build_id: build_id,
+        timestamp: timestamp,
+        cron_time: cron_time,
+        finish_time: finish_time,
+        cron_type: cron_type,
+        status: status,
+    });
+    let resault = {};
+    add_cron.save((err, res) => {
         if (err) {
             resault.ok = false;
             resault.body = err;
@@ -102,4 +125,5 @@ module.exports = {
     update_build: update_build,
     delete_build: delete_build,
     add_user: add_user,
+    add_cron : add_cron,
 };
