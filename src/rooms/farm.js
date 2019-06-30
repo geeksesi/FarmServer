@@ -1,9 +1,10 @@
 const colyseus = require('colyseus');
 // const { encrypt, decrypt } = require('./../controller/security');
 const { Build, User } = require('./../db/module');
-const { add_build, update_build, delete_build, add_user } = require('./../db/set');
+const { update_build, delete_build, add_user } = require('./../db/set');
+const { add_build, on_cron } = require('./controller/controller');
 // const passwordHash = require('password-hash');
-
+const { do_cron } = require('./controller/cron');
 module.exports = class extends colyseus.Room {
 
     onInit(options) {
@@ -50,6 +51,16 @@ module.exports = class extends colyseus.Room {
             ws: client
         }
         Build.find({ user_id: this.authed_client[client.id].id }, (err, build) => {
+            build.forEach(element => {
+                do_cron(element._id, this.authed_client[client.id].id, res => {
+                    if(!res || res.cron === false)
+                    {
+                        console.log("can't");
+                        return false;
+                    }
+                    console.log("find a open cron");
+                });
+            });
             if (err) {
                 this.send(client, {
                     ok: false,
@@ -61,7 +72,7 @@ module.exports = class extends colyseus.Room {
 
                 return false;
             }
-            console.log(build);
+            // console.log(build);
             this.send(client, {
                 ok: true,
                 message: "here your init data",
@@ -76,37 +87,7 @@ module.exports = class extends colyseus.Room {
     onMessage(client, message) {
         // console.log(message);
         if (message.message_type === 'add_build') {
-            if (typeof message.type === 'undefined' && typeof message.location === 'undefined') {
-                this.send(client, {
-                    ok: false,
-                    message_type: "on_add",
-                    message: `please fill required`
-                });
-                return false;
-            }
-            add_build(message.type, this.authed_client[client.id].id, message.location, res => {
-                if (!res.ok) {
-                    this.send(client, {
-                        ok: false,
-                        message_type: "on_add",
-                        message: `can't set build on ${message.location}`
-                    });
-                } else {
-                    this.send(client, {
-                        ok: true,
-                        message_type: "on_add",
-                        message: `build maded by id : ${res.body._id}`,
-                        data: {
-                            id: res.body._id,
-                            type: res.body.type,
-                            x0: res.body.x0,
-                            x1: res.body.x1,
-                            y0: res.body.y0,
-                            y1: res.body.y1,
-                        }
-                    });
-                }
-            });
+            add_build(this.send, message, client, this.authed_client);
         } else if (message.message_type === 'update_build') {
             if (typeof message.id === 'undefined' && typeof message.new_type === 'undefined' && typeof message.new_location === 'undefined') {
                 this.send(client, {
@@ -160,6 +141,8 @@ module.exports = class extends colyseus.Room {
                     });
                 }
             })
+        } else if (message.message_type === 'do_cron') {
+            on_cron(this.send, message, client, this.authed_client);
         }
     }
 

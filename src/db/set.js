@@ -37,8 +37,12 @@ async function add_build(type, user_id, location, cb) {
 
 }
 
-async function update_build(id, user_id, new_x0, new_y0, new_x1, new_y1, cb) {
+async function update_build(id, user_id, location, cb) {
     let resault = {};
+    const new_x0 = location.x0;
+    const new_x1 = location.x1;
+    const new_y0 = location.y0;
+    const new_y1 = location.y1;
     if (!await build_location(new_x0, new_x1, new_y0, new_y1, user_id)) {
         resault.ok = false;
         resault.body = {};
@@ -46,7 +50,7 @@ async function update_build(id, user_id, new_x0, new_y0, new_x1, new_y1, cb) {
         cb(resault);
         return false;
     }
-    db_module.Build.findOneAndUpdate({ _id: id }, {
+    db_module.Build.findOneAndUpdate({ _id: id, user_id : user_id }, {
             x0: new_x0,
             y0: new_y0,
             x1: new_x1,
@@ -98,7 +102,7 @@ function add_user(cb) {
     })
 }
 
-function add_cron(build_id, cron_time, finish_time, cron_type) {
+function add_cron(build_id, cron_time, finish_time, cron_type, cb) {
     const add_cron = new db_module.Cron({
         build_id: build_id,
         timestamp: Math.round((new Date()).getTime() / 1000),
@@ -116,6 +120,7 @@ function add_cron(build_id, cron_time, finish_time, cron_type) {
             resault.ok = true;
             resault.body = res;
         }
+        console.log(resault);
         cb(resault);
     })
 }

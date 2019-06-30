@@ -23,7 +23,7 @@ const cronSchema = mongoos.Schema({
         require: false
     },
     status: {
-        type: Boolean,
+        type: String,
         require: false
     },
 });
